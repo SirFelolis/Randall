@@ -20,7 +20,7 @@ f = Figlet(font='doom')
 print("\n" + Style.BRIGHT + Fore.BLUE + f.renderText('Randall'))
 
 # These MUST be lower case
-words_to_match = ["randall", "amazing", "xkcd"]
+words_to_match = ["randall", "amazing", "xkcd", "fake"]
 
 cacheFile = 'cache.bcf'
 
@@ -57,8 +57,9 @@ def run_bot():
 		comment_text = comment.body.lower()
 		is_match = any(string in comment_text for string in words_to_match)
 
-		if comment.id not in cache and is_match and comment.author is not tokens.randall_username:
+		if (comment.id not in cache and is_match) and (comment.author.name.lower() not in "wooshingrandall"):
 			print(Style.BRIGHT + Fore.GREEN + "Match found! Comment ID: " + comment.id)
+			print(Style.BRIGHT + Fore.GREEN + "Comment by " + comment.author.name)
 			reply = random.choice(responses)
 			try:
 				comment.reply(reply + '\n\n&nbsp;\n\n*^^^I ^^^am ^^^a ^^^bot ^^^created ^^^by ^^^/u/Felolis*')
