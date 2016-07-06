@@ -4,7 +4,7 @@ sys.path.insert(0, os.path.abspath('..'))
 
 import praw, time, pickle, random
 
-# This is another python file on a higher level that contains the passwords for the bod
+# This is another python file that contains variables for passwords and usernames
 import tokens
 
 from pyfiglet import Figlet
@@ -57,7 +57,7 @@ def run_bot():
 		comment_text = comment.body.lower()
 		is_match = any(string in comment_text for string in words_to_match)
 
-		if comment.id not in cache and is_match:
+		if comment.id not in cache and is_match and comment.author is not tokens.randall_username:
 			print(Style.BRIGHT + Fore.GREEN + "Match found! Comment ID: " + comment.id)
 			reply = random.choice(responses)
 			try:
