@@ -4,12 +4,16 @@ sys.path.insert(0, os.path.abspath('..'))
 
 import praw, time, pickle, random
 
-# This is another python file that contains variables for passwords and usernames
+# This is a local python file that contains variables for passwords and usernames
 import tokens
 
 from pyfiglet import Figlet
 from colorama import init, Fore, Style
 init(autoreset=True)
+
+import argparse
+parser = argparse.ArgumentParser()
+parser.parse_args()
 
 r = praw.Reddit(user_agent="Replies \'Woosh\' to random comments by Felolis /u/Felolis")
 print("Logging in...")
@@ -44,14 +48,18 @@ except:
 	with open(cacheFile, 'wb') as f:
 		pickle.dump(cache, f)
 
-print(Fore.MAGENTA + "Cache:\n" + str(cache))
+print(Fore.MAGENTA + "Looking for words: " + str(words_to_match))
+print(Style.BRIGHT + Fore.MAGENTA + "\nCache: " + str(cache))
 
 def run_bot():
 	print("Grabbing subreddit...")
 	subreddit = r.get_subreddit("felolis")
 
 	print("Grabbing comments...")
-	comments = subreddit.get_comments(limit=50)
+	try:
+		comments = subreddit.get_comments(limit=50)
+	except:
+		print(Fore.RED + "Failed to grab comments...")
 
 	for comment in comments:
 		comment_text = comment.body.lower()
@@ -75,7 +83,9 @@ def run_bot():
 			with open(cacheFile, 'wb') as f:
 				pickle.dump(cache, f)
 			return
-
+		else:
+			print(Fore.RED + "No comments matching criteria found")
+			return
 
 while True:
 	run_bot()
