@@ -1,14 +1,19 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
-import tokens, praw, time, pickle, random
+
+import praw, time, pickle, random
+
+# This is another python file on a higher level that contains the passwords for the bod
+import tokens
+
 from pyfiglet import Figlet
 from colorama import init, Fore, Style
 init(autoreset=True)
 
 r = praw.Reddit(user_agent="Replies \'Woosh\' to random comments by Felolis /u/Felolis")
 print("Logging in...")
-r.login("WooshingRandall", "Asor21Si", disable_warning=True)
+r.login(tokens.randall_username, tokens.randall_password, disable_warning=True)
 print(Style.BRIGHT + Fore.GREEN + "Success!")
 
 f = Figlet(font='doom')
