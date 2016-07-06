@@ -20,9 +20,6 @@ print(Style.BRIGHT + Fore.GREEN + "Success!")
 f = Figlet(font='doom')
 print("\n" + Style.BRIGHT + Fore.BLUE + f.renderText('Randall'))
 
-# These MUST be lower case
-words_to_match = ["randall", "amazing", "xkcd", "fake", "bot", "beautiful"]
-
 cacheFile = 'cache.bcf'
 
 cache = ["d50cskt", "d50c2cq", "d5005yj"]
