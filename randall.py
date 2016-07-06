@@ -11,9 +11,6 @@ from pyfiglet import Figlet
 from colorama import init, Fore, Style
 init(autoreset=True)
 
-import argparse
-parser = argparse.ArgumentParser()
-parser.parse_args()
 
 r = praw.Reddit(user_agent="Replies \'Woosh\' to random comments by Felolis /u/Felolis")
 print("Logging in...")
@@ -24,7 +21,7 @@ f = Figlet(font='doom')
 print("\n" + Style.BRIGHT + Fore.BLUE + f.renderText('Randall'))
 
 # These MUST be lower case
-words_to_match = ["randall", "amazing", "xkcd", "fake"]
+words_to_match = ["randall", "amazing", "xkcd", "fake", "bot", "beautiful"]
 
 cacheFile = 'cache.bcf'
 
@@ -53,39 +50,38 @@ print(Style.BRIGHT + Fore.MAGENTA + "\nCache: " + str(cache))
 
 def run_bot():
 	print("Grabbing subreddit...")
-	subreddit = r.get_subreddit("felolis")
+	subreddit = r.get_subreddit("xkcd")
+	print(Fore.GREEN + Style.DIM + "/r/" + str(subreddit))
 
 	print("Grabbing comments...")
-	try:
-		comments = subreddit.get_comments(limit=50)
-	except:
-		print(Fore.RED + "Failed to grab comments...")
+	comments = subreddit.get_comments(limit=100)
+	flat_comments = praw.helpers.flatten_tree(comments)
+	comment = random.choice(flat_comments)
 
-	for comment in comments:
-		comment_text = comment.body.lower()
-		is_match = any(string in comment_text for string in words_to_match)
+	comment_text = comment.body.lower()
+	is_match = any(string in comment_text for string in words_to_match)
 
-		if (comment.id not in cache and is_match) and (comment.author.name.lower() not in "wooshingrandall"):
-			print(Style.BRIGHT + Fore.GREEN + "Match found! Comment ID: " + comment.id)
-			print(Style.BRIGHT + Fore.GREEN + "Comment by " + comment.author.name)
-			reply = random.choice(responses)
-			try:
-				comment.reply(reply + '\n\n&nbsp;\n\n*^^^I ^^^am ^^^a ^^^bot ^^^created ^^^by ^^^/u/Felolis*')
-			except praw.errors.RateLimitExceeded as err:
-				print(Style.BRIGHT + Fore.RED + str(err))
-				return
-
-			print(Style.BRIGHT + Fore.GREEN + "Replied succesful")
-			print("Replied with: \"" + random.choice(responses) + "\"")
-			cache.append(comment.id)
-
-			print("Opening cache file...")
-			with open(cacheFile, 'wb') as f:
-				pickle.dump(cache, f)
+	if (comment.id not in cache) and (comment.author.name.lower() not in "wooshingrandall"):
+		print(Style.BRIGHT + Fore.GREEN + "Match found! Comment ID: " + comment.id)
+		print(Style.BRIGHT + Fore.GREEN + "Comment by " + comment.author.name)
+		reply = random.choice(responses)
+		try:
+			comment.reply(reply + '\n\n&nbsp;\n\n*^^^I ^^^am ^^^a ^^^bot ^^^created ^^^by ^^^/u/Felolis*')
+		except praw.errors.RateLimitExceeded as err:
+			print(Style.BRIGHT + Fore.RED + str(err))
 			return
-		else:
-			print(Fore.RED + "No comments matching criteria found")
-			return
+
+		print(Style.BRIGHT + Fore.GREEN + "Replied succesful")
+		print("Replied with: \"" + reply + "\"")
+		cache.append(comment.id)
+
+		print("Opening cache file...")
+		with open(cacheFile, 'wb') as f:
+			pickle.dump(cache, f)
+		return
+	else:
+		print(Fore.RED + "No comments matching criteria found")
+		return
 
 while True:
 	run_bot()
