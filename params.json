@@ -1,0 +1,6 @@
+{
+  "name": "Randall",
+  "tagline": "Randall is a bot that replies to certain comments on /r/xkcd with confusing messages such as \"Woosh!\" or \"Are you for real\"",
+  "body": "# Randall the reddit bot\r\n\r\n    ______                _       _ _\r\n    | ___ \\              | |     | | |\r\n    | |_/ /__ _ _ __   __| | __ _| | |\r\n    |    // _` | '_ \\ / _` |/ _` | | |\r\n    | |\\ \\ (_| | | | | (_| | (_| | | |\r\n    \\_| \\_\\__,_|_| |_|\\__,_|\\__,_|_|_|\r\n\r\n\r\nRandall is a bot that replies to certain comments on /r/xkcd with confusing messages such as \"Woosh!\" or \"Are you for real\"\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
